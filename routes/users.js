@@ -3,16 +3,26 @@ const router = express.Router();
 
 router.use(logger);
 
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
+    console.log(`User is admin = ${req.admin}`);
+
+    console.log(req.query.name);
     res.send('User list');
 })
 
 router.get('/new', (req, res) => {
-    res.send('User new Form');
+    res.render('users/new'/* , { firstName: 'test' } */);
 })
 
 router.post('/', (req, res) => {
-    res.send('Create User');
+    const isValid = true;
+    if(isValid) {
+        users.push({ firstName: req.body.firstName });
+        res.redirect(`/users/${users.length - 1}`)
+    } else {
+        console.log('Error');
+        res.render('users/new', { firstName: req.body.firstName })
+    }
 })
 
 router.route('/:id')
@@ -51,7 +61,15 @@ router.param('id', (req, res, next, id) => {
 function logger(req, res, next) {
     console.log(req.originalUrl);
     next();
+}
 
+function auth(req, res, next) {
+    if(req.query.admin === 'true') {
+        req.admin = true;
+        next();
+    } else {
+        res.send('No auth!!');
+    }
 }
 
 module.exports = router

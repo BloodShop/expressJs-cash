@@ -1,13 +1,17 @@
 const express = require('express');
 const app = express()
 
+app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
+/* app.get('/', (req, res) => {
     res.render('index', { text: 'wazzzap' });
     // res.download('src/index.js') // Donwload the file
     // res.status(500).json({ message: 'Error' })
-})
+}) */
 
 /* app.use(logger); // Going to be invoked only when the routes below are called, not the above */
 
